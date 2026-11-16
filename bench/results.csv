@@ -1,0 +1,7 @@
+name,plan,queries,mean_us,p50_us,p99_us,max_us
+"WHERE id = ? (point)",INDEX,10000,1.78773,1.75,2.5,14.75
+"WHERE id BETWEEN (1000 rows)",INDEX,1000,600.6,603.958,663.5,709.167
+"WHERE email = ? (point)",SCAN,20,33613.3,33722.1,37362.1,37362.1
+"WHERE age = ? (~1% rows)",SCAN,5,33891.2,33898.9,34517.6,34517.6
+insert_sql_seconds,,,0.431509,,,
+insert_bulk_seconds,,,0.137771,,,

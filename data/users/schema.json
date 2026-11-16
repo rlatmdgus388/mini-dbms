@@ -1,0 +1,9 @@
+{
+  "table": "users",
+  "columns": [
+    { "name": "id", "type": "BIGINT" },
+    { "name": "name", "type": "VARCHAR(50)" },
+    { "name": "age", "type": "INT" },
+    { "name": "email", "type": "VARCHAR(100)" }
+  ]
+}
