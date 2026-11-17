@@ -116,14 +116,16 @@ src/cli      minidb, minidb_server
 
 `make bench` 로 재현합니다. 전체 표와 방법은 [docs/benchmark.md](docs/benchmark.md), 그래프는 [docs/benchmark.svg](docs/benchmark.svg).
 
+![평균 쿼리 지연시간 (로그 스케일)](docs/benchmark.svg)
+
 | 쿼리 | 계획 | 평균 지연 |
 |---|---|---|
-| `WHERE id = ?` | INDEX | 1.79 µs |
-| `WHERE id BETWEEN` (1000행) | INDEX | 600.60 µs |
-| `WHERE email = ?` | SCAN | 33.61 ms |
+| `WHERE id = ?` | INDEX | 4.38 µs |
+| `WHERE id BETWEEN` (1000행) | INDEX | 1.23 ms |
+| `WHERE email = ?` | SCAN | 70.59 ms |
 
-id 인덱스 점 조회가 비인덱스 선형 탐색보다 약 18,800배 빨랐습니다 (이 실행 기준, 실행마다 약 18,000~19,000배로 변동).
-삽입은 SQL 경로 0.43 s, 벌크 경로 0.14 s (각 100만 행). 측정 환경: Apple Silicon, OS 페이지 캐시 warm 상태.
+id 인덱스 점 조회가 비인덱스 선형 탐색보다 약 16,100배 빨랐습니다 (이 실행 기준. 머신 부하에 따라 실행마다 크게 변동하며 이전 실행에서는 약 18,800배).
+삽입은 SQL 경로 0.83 s, 벌크 경로 0.28 s (각 100만 행). 측정 환경: Apple Silicon, OS 페이지 캐시 warm 상태.
 
 ## 테스트
 

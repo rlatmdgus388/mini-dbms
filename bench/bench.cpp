@@ -88,10 +88,20 @@ void write_svg(const std::string& path, const std::vector<Stats>& stats) {
   o << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << w << "\" height=\"" << h << "\" font-family=\"sans-serif\" font-size=\"13\">\n";
   o << "<rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n";
   o << "<text x=\"" << left << "\" y=\"26\" font-weight=\"bold\">Mean query latency (log scale, lower is better)</text>\n";
+  // 눈금선: 10의 거듭제곱(1µs, 10µs, ... ) 마다 세로선과 라벨. 막대 길이 = log10(µs) 에 비례.
+  const double axis_w = w - left - 150;
+  const int axis_bottom = top + static_cast<int>(stats.size()) * row_h;
+  for (int d = 0; d <= static_cast<int>(max_log); ++d) {
+    double x = left + d / max_log * axis_w;
+    o << "<line x1=\"" << x << "\" y1=\"" << top - 4 << "\" x2=\"" << x << "\" y2=\"" << axis_bottom
+      << "\" stroke=\"#cccccc\" stroke-dasharray=\"3,3\"/>\n";
+    o << "<text x=\"" << x << "\" y=\"" << axis_bottom + 16 << "\" text-anchor=\"middle\" font-size=\"11\" fill=\"#666666\">"
+      << fmt_time(std::pow(10.0, d)) << "</text>\n";
+  }
   for (size_t i = 0; i < stats.size(); ++i) {
     const Stats& s = stats[i];
     int y = top + static_cast<int>(i) * row_h;
-    double len = (std::log10(std::max(1.0, s.mean_us)) + 0.0) / max_log * (w - left - 150);
+    double len = std::log10(std::max(1.0, s.mean_us)) / max_log * axis_w;
     const char* color = s.plan == "INDEX" ? "#2a7de1" : "#e1572a";
     o << "<text x=\"" << left - 10 << "\" y=\"" << y + 20 << "\" text-anchor=\"end\">" << s.name << "</text>\n";
     o << "<rect x=\"" << left << "\" y=\"" << y + 4 << "\" width=\"" << std::max(2.0, len) << "\" height=\"26\" fill=\"" << color << "\"/>\n";
