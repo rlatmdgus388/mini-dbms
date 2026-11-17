@@ -2,7 +2,7 @@
 
 > 이 파일은 `make bench` 가 자동 생성합니다. 모든 수치는 해당 실행의 실측값입니다.
 
-- 실행 시각: 2026-11-16 22:28
+- 실행 시각: 2026-11-17 10:23
 - 레코드 수: 1000000 (테이블당)
 - 하드웨어 스레드: 10
 - 스키마: id BIGINT, name VARCHAR(32), age INT, email VARCHAR(64)
@@ -13,19 +13,19 @@
 
 | 경로 | 소요 시간 | 처리량 |
 |---|---|---|
-| SQL (1000행 INSERT 문 반복) | 0.43 s | 2317451 rows/s |
-| 벌크 (Table::insert, 10000행 배치) | 0.14 s | 7258422 rows/s |
+| SQL (1000행 INSERT 문 반복) | 0.83 s | 1198526 rows/s |
+| 벌크 (Table::insert, 10000행 배치) | 0.28 s | 3572390 rows/s |
 
 ## 조회
 
 | 쿼리 | 실행 계획 | 횟수 | 평균 | p50 | p99 | 최대 |
 |---|---|---|---|---|---|---|
-| `WHERE id = ? (point)` | INDEX | 10000 | 1.79 µs | 1.75 µs | 2.50 µs | 14.75 µs |
-| `WHERE id BETWEEN (1000 rows)` | INDEX | 1000 | 600.60 µs | 603.96 µs | 663.50 µs | 709.17 µs |
-| `WHERE email = ? (point)` | SCAN | 20 | 33.61 ms | 33.72 ms | 37.36 ms | 37.36 ms |
-| `WHERE age = ? (~1% rows)` | SCAN | 5 | 33.89 ms | 33.90 ms | 34.52 ms | 34.52 ms |
+| `WHERE id = ? (point)` | INDEX | 10000 | 4.38 µs | 4.25 µs | 6.79 µs | 34.38 µs |
+| `WHERE id BETWEEN (1000 rows)` | INDEX | 1000 | 1.23 ms | 1.23 ms | 1.28 ms | 1.51 ms |
+| `WHERE email = ? (point)` | SCAN | 20 | 70.59 ms | 70.80 ms | 73.21 ms | 73.21 ms |
+| `WHERE age = ? (~1% rows)` | SCAN | 5 | 70.08 ms | 70.84 ms | 72.38 ms | 72.38 ms |
 
-**ID 인덱스 점 조회는 비인덱스(email) 선형 탐색보다 평균 약 18802배 빠르다.**
+**ID 인덱스 점 조회는 비인덱스(email) 선형 탐색보다 평균 약 16112배 빠르다.**
 
 ![latency](benchmark.svg)
 
